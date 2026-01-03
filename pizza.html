@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pizza</title>
+</head>
+<body style="font-family: sans-serif;">
+<h1>
+    <span style="color: white;">Pizza Topping - </span>
+    <span id="topping" style="color: red;">...</span>
+</h1>
+<h2>
+    <span style="color: white;">Cheese - </span>
+    <span id="cheese" style="color: green;">...</span>
+</h2>
+<p id="topic">Loading...</p>
+
+<script>
+    const render = () => {
+        const output = window.openai?.toolOutput || {};
+        const topping = output.pizzaTopping;
+        const cheese = output.cheeseType;
+        let updated = false;
+        if (topping) {
+            document.getElementById("topping").textContent = topping;
+            updated = true;
+        }
+        if (cheese) {
+            document.getElementById("cheese").textContent = cheese;
+            updated = true;
+        }
+        if (updated) {
+            document.getElementById("topic").textContent = "Tool Output:" + JSON.stringify(output);
+        }
+        return updated;
+    }
+
+    if (!render()) {
+        const timer = setInterval(() => render() && clearInterval(timer), 200);
+        document.addEventListener("visibilitychange", () => !document.hidden && render());
+    }
+
+</script>
+
+</body>
+</html>
